@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <form id="login">
+        <label>Käyttäjänimi</label>
+        <input name="username" type="text">
+
+        <label>Salasana</label>
+        <input name="password" type="password">
+
+        <button>Kirjaudu sisään</button>
+    </form>
+
+    <script>
+
+        function login(credentials) {
+
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credentials)
+            };
+
+            fetch('http://localhost:3000/api/v1/user/login', options)
+                .then(response => {
+                
+                    if(response.ok){   
+                        window.location.assign("/notes.html")
+                    } else {
+                        alert("Tarkista tiedot")
+                    }
+
+                }).catch(err => console.error(err));
+
+        }
+
+        const form = document.getElementById("login")
+
+        form.addEventListener("submit", (event)=>{
+
+            event.preventDefault()
+
+            const formData = new FormData(form)
+
+            console.log("form data ennen objektiksi muuttamista", formData)
+
+            const credentials = Object.fromEntries(formData)
+
+            console.log("Kirjautumistiedot muutettu objektiksi", credentials)
+
+            form.reset()
+
+            login(credentials)
+
+        })
+    </script>
+
+</body>
+
+</html>
